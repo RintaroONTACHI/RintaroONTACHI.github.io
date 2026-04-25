@@ -1,0 +1,35 @@
+name: Switch Site Mode
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: '表示するモードを選択'
+        required: true
+        default: 'normal'
+        type: choice
+        options:
+          - normal
+          - maintenance
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Switch file
+        run: |
+          if [ "${{ github.event.inputs.mode }}" == "maintenance" ]; then
+            cp maintenance.html index.html
+          else
+            cp normal.html index.html
+          fi
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: main # 公開用のブランチを指定
