@@ -2,8 +2,8 @@ let auth0Client = null;
 
 // Auth0の設定値
 const config = {
-  domain: "YOUR_AUTH0_DOMAIN", // Auth0ダッシュボードからコピー
-  clientId: "YOUR_CLIENT_ID"   // Auth0ダッシュボードからコピー
+  domain: "epsilon.jp.auth0.com", // Auth0ダッシュボードからコピー
+  clientId: "TQ8auFHVhAe44FtxkoOhUPyWScIOXIMI"   // Auth0ダッシュボードからコピー
 };
 
 window.onload = async () => {
