@@ -7,7 +7,7 @@ const config = {
 };
 
 window.onload = async () => {
-  // 1. Initialize Auth0 Client
+  // Auth0の初期化
   auth0Client = await createAuth0Client({
     domain: config.domain,
     clientId: config.clientId,
@@ -16,7 +16,7 @@ window.onload = async () => {
     }
   });
 
-  // 2. Handle the redirect from Auth0
+  // ログイン後のリダイレクト処理
   const query = window.location.search;
   if (query.includes("code=") && query.includes("state=")) {
     try {
@@ -27,33 +27,22 @@ window.onload = async () => {
     }
   }
 
-  // 3. Check authentication status
+  // ログイン状態の確認
   const isAuthenticated = await auth0Client.isAuthenticated();
 
   if (isAuthenticated) {
-    // Show members-only content
-    showApp();
+    // ログイン済み：コンテンツを表示
+    document.getElementById("loading-view").style.display = "none";
+    document.getElementById("logged-in-view").style.display = "block";
+    
+    const user = await auth0Client.getUser();
+    console.log("Logged in as:", user.name);
   } else {
-    // If not logged in, redirect to login page immediately
-    login();
+    // 未ログイン：即座にAuth0ログイン画面へ飛ばす
+    await auth0Client.loginWithRedirect();
   }
 };
 
-const showApp = async () => {
-  const user = await auth0Client.getUser();
-  
-  // Update UI for members
-  document.getElementById("status").innerText = `Welcome, ${user.name}!`;
-  document.getElementById("logged-in-view").style.display = "block";
-  document.getElementById("loading-view").style.display = "none";
-};
-
-// Execute Login
-const login = async () => {
-  await auth0Client.loginWithRedirect();
-};
-
-// Execute Logout
 const logout = () => {
   auth0Client.logout({
     logoutParams: {
