@@ -27,7 +27,7 @@
 
         .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; width: 100%; }
 
-        header, .research-card, footer {
+        header, .glass-section, footer, .research-card {
             background-color: rgba(255, 255, 255, 0.82); 
             padding: 30px 40px; border-radius: 16px; margin-bottom: 25px; 
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); 
@@ -50,8 +50,7 @@
 
         .link-list { list-style: none; padding: 0; display: flex; gap: 20px; margin: 15px 0; }
         .link-list a { color: #0366d6; text-decoration: none; font-weight: 500; font-size: 0.9em; }
-        .link-list a:hover { text-decoration: underline; }
-
+        
         .abstract-container { border-top: 1px solid #eee; padding-top: 25px; margin-top: 25px; }
         .abstract-label { 
             font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.2em; 
@@ -59,7 +58,7 @@
         }
         .abstract-content { line-height: 1.7; text-align: justify; color: #1a1a1a; font-family: serif; }
 
-        footer { text-align: center; font-size: 0.85em; color: #586069; padding: 20px; }
+        footer { text-align: center; font-size: 0.85em; color: #586069; }
     </style>
 </head>
 <body>
@@ -69,6 +68,14 @@
         <h1>Academic Resources</h1>
         <p><strong>Rintaro ONTACHI</strong> | Independent Researcher</p>
     </header>
+
+    <section class="glass-section">
+        <h2 style="font-size: 1.2em; margin-top: 0;">Academic Profile</h2>
+        <p style="line-height: 1.6;">
+            Mathematical Physics, Algebraic Structures, and Quantum Information Theory. 
+            Currently focused on the spectral properties of operators over group rings.
+        </p>
+    </section>
 
     <section class="research-card">
         <div class="paper-selector" id="paperSelector"></div>
@@ -95,7 +102,7 @@
 </div>
 
 <script>
-    // 論文データ
+    // 論文データ：ここに追加することでタブが自動生成されます
     const papers = [
         {
             label: "Paper 1",
@@ -114,23 +121,23 @@
 
     function updatePaper(index) {
         const p = papers[index];
+        if (!p) return;
+
         titleEl.innerText = p.title;
         viewer.src = p.pdf;
         abstractDiv.innerHTML = p.abstract;
         
-        // ダウンロードリンクの更新
         downloadDiv.innerHTML = `
-            <li><a href="${p.tex}" download>Download Source (${p.tex})</a></li>
-            <li><a href="${p.pdf}" download>Download Full Paper (PDF)</a></li>
+            <li><a href="${p.tex}" download>Source (${p.tex})</a></li>
+            <li><a href="${p.pdf}" download>PDF (${p.pdf})</a></li>
         `;
 
-        // ボタンのアクティブ状態を更新
         document.querySelectorAll('.paper-btn').forEach((btn, i) => {
             btn.classList.toggle('active', i === index);
         });
     }
 
-    // 初期化：ボタンの生成
+    // タブ（ボタン）の生成
     papers.forEach((p, index) => {
         const btn = document.createElement('button');
         btn.className = 'paper-btn';
@@ -139,7 +146,7 @@
         selector.appendChild(btn);
     });
 
-    // 最初の論文を表示
+    // 初期表示
     if (papers.length > 0) {
         updatePaper(0);
     }
