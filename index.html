@@ -6,7 +6,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-D9DGJTDV9B');
     </script>
 
@@ -15,6 +14,7 @@
     <title>Rintaro ONTACHI | Academic Profile</title>
 
     <style>
+        /* Existing Styles (Keep as is) */
         body {
             margin: 0; padding: 0; color: #24292e; font-size: 15px;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -23,12 +23,12 @@
                 radial-gradient(at 0% 0%, rgba(255,255,255,0.9) 0%, transparent 70%),
                 linear-gradient(125deg, #ffffff 0%, #ffffff 30%, #d1d5da 35%, #444d56 50%, #1b1f23 70%, #0b0e14 100%);
             background-attachment: fixed; min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
         }
 
-        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; width: 100%; }
 
-        /* グラスモーフィズム共通 */
-        header, .glass-section, footer {
+        header, .glass-section, footer, .research-card {
             background-color: rgba(255, 255, 255, 0.82); 
             padding: 30px 40px;
             border-radius: 16px; margin-bottom: 25px; 
@@ -37,18 +37,11 @@
             border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
-        /* 論文切り替えメインカード */
-        .research-card {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 16px; margin-bottom: 25px; 
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        }
-
+        .research-card { background-color: rgba(255, 255, 255, 0.95); padding: 40px; }
         h1 { border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; margin-top: 0; font-size: 2em; }
         h2 { margin-top: 0; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; color: #002f5d; font-size: 1.4em; }
 
-        /* セレクターボタン */
+        /* Selector Buttons */
         .paper-selector { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
         .paper-btn {
             padding: 10px 20px; border: 1px solid #d1d5da; background: #fff;
@@ -60,32 +53,33 @@
         .link-list li { margin-bottom: 12px; }
         .link-list a { color: #0366d6; text-decoration: none; font-weight: 500; }
 
-        /* プレビューエリア */
-        .pdf-container {
-            margin: 20px 0 30px 0; border: 1px solid #d1d5da; border-radius: 8px;
-            overflow: hidden; background: #fff;
-        }
+        .pdf-container { margin: 20px 0 30px 0; border: 1px solid #d1d5da; border-radius: 8px; overflow: hidden; background: #fff; }
         iframe { width: 100%; height: 600px; border: none; }
 
-        /* Abstract装飾 */
         .abstract-container { border-top: 1px solid #eee; padding-top: 25px; }
-        .abstract-label {
-            font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.2em;
-            color: #666; margin-bottom: 15px; font-weight: bold; display: block;
-        }
-        .abstract-content {
-            font-family: 'EB Garamond', serif; font-size: 0.95em;
-            line-height: 1.7; color: #1a1a1a; text-align: justify;
-        }
+        .abstract-label { font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.2em; color: #666; margin-bottom: 15px; font-weight: bold; display: block; }
+        .abstract-content { font-family: 'EB Garamond', serif; font-size: 0.95em; line-height: 1.7; color: #1a1a1a; text-align: justify; }
 
-        footer p { margin: 0; font-size: 0.85em; color: #586069; }
+        /* Auth0 Views Control */
+        #logged-in-view { display: none; }
+        #loading-view { text-align: center; color: white; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px; }
+        
+        .logout-btn { 
+            background: #d93025; color: white; border: none; padding: 8px 16px; 
+            border-radius: 6px; cursor: pointer; float: right; font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div id="loading-view">
+    <p>Authenticating... Please wait.</p>
+</div>
+
+<div id="logged-in-view" class="container">
     <header>
-        <h1>Academic Resources</h1>
+        <button class="logout-btn" onclick="logout()">Log Out</button>
+        <h1 id="status">Academic Resources</h1>
         <p style="font-size: 1.05em; color: #444; margin: 10px 0 0 0;"><strong>Rintaro ONTACHI</strong> | Independent Researcher</p>
     </header>
 
@@ -99,21 +93,15 @@
 
     <section class="research-card">
         <div class="paper-selector" id="paperSelector"></div>
-
         <div id="dynamicContent">
             <h2 id="paperTitle">Loading...</h2>
-            
-            <ul id="downloadLinks" class="link-list" style="margin-bottom: 25px;">
-            </ul>
-
+            <ul id="downloadLinks" class="link-list" style="margin-bottom: 25px;"></ul>
             <div class="pdf-container">
                 <iframe id="pdfViewer" src="" title="Document Preview"></iframe>
             </div>
-
             <div class="abstract-container">
                 <span class="abstract-label">Abstract</span>
-                <div id="abstractText" class="abstract-content">
-                </div>
+                <div id="abstractText" class="abstract-content"></div>
             </div>
         </div>
     </section>
@@ -123,15 +111,18 @@
     </footer>
 </div>
 
+<script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+<script src="main.js"></script>
+
 <script>
-    // 論文ごとのデータ設定
+    // --- Existing Research Data & Logic ---
     const papers = [
         {
             label: "Paper 1",
             title: "On Admissible Operators over Group Rings",
             pdf: "001.pdf",
             tex: "001.tex",
-            abstract: "This paper systematically describes the structure of linear combinations in the group ring <strong>CG</strong> from three perspectives: algebra, analysis, and quantum mechanics. By realizing the group ring as bounded operators on a Hilbert space through the left regular representation, the study elucidates its spectral properties and trace structures. Notably, it demonstrates that the product in a group ring is isomorphic to the composition of quantum transition amplitudes and reveals that the geometric characteristics of the group are reflected in the spectral radius of the operators."
+            abstract: "This paper systematically describes the structure of linear combinations in the group ring <strong>CG</strong> from three perspectives: algebra, analysis, and quantum mechanics..."
         }
     ];
 
@@ -143,7 +134,6 @@
 
     function updatePaper(index) {
         const p = papers[index];
-        
         titleEl.innerText = p.title;
         viewer.src = p.pdf;
         abstractDiv.innerHTML = p.abstract;
@@ -151,7 +141,6 @@
             <li><a href="${p.tex}" download>Download Source (${p.tex})</a></li>
             <li><a href="${p.pdf}" download>Download Full Paper (${p.pdf})</a></li>
         `;
-
         document.querySelectorAll('.paper-btn').forEach((btn, i) => {
             btn.classList.toggle('active', i === index);
         });
