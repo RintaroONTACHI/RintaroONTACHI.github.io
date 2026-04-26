@@ -27,7 +27,7 @@
 
         .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; width: 100%; }
 
-        header, .glass-section, footer, .research-card {
+        header, .research-card, footer {
             background-color: rgba(255, 255, 255, 0.82); 
             padding: 30px 40px; border-radius: 16px; margin-bottom: 25px; 
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); 
@@ -88,23 +88,27 @@
 <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
 
 <script>
-    // --- Auth0 Logic ---
     let auth0Client = null;
+
     const auth0Config = {
         domain: "epsilon.jp.auth0.com",
-        clientId: "TQ8auFHVhAe44FtxkoOhUPyWScIOXIMI"
+        clientId: "TQ8auFHVhAe44FtxkoOhUPyWScIOXIMI",
+        // URLは末尾の .io/ までに統一
+        redirect_uri: "https://rintaroontachi.github.io/"
     };
 
     window.onload = async () => {
         try {
+            // ライブラリの初期化
             auth0Client = await createAuth0Client({
                 domain: auth0Config.domain,
                 clientId: auth0Config.clientId,
                 authorizationParams: {
-                    redirect_uri: window.location.origin + window.location.pathname
+                    redirect_uri: auth0Config.redirect_uri
                 }
             });
 
+            // ログイン後のコールバック処理
             const query = window.location.search;
             if (query.includes("code=") && query.includes("state=")) {
                 await auth0Client.handleRedirectCallback();
@@ -116,22 +120,27 @@
             if (isAuthenticated) {
                 document.getElementById("loading-view").style.display = "none";
                 document.getElementById("logged-in-view").style.display = "block";
-                initPaperLogic();
+                loadPaperData();
             } else {
+                // 未ログイン時はログイン画面へ
                 await auth0Client.loginWithRedirect();
             }
         } catch (err) {
-            console.error(err);
-            document.getElementById("loading-view").innerHTML = "Authentication Error. Please ensure AdBlock is disabled.";
+            console.error("Auth Error:", err);
+            document.getElementById("loading-view").innerHTML = 
+                "Authentication Error. Please ensure AdBlock is disabled and refresh.";
         }
     };
 
     function logout() {
-        auth0Client.logout({ logoutParams: { returnTo: window.location.origin + window.location.pathname } });
+        auth0Client.logout({
+            logoutParams: {
+                returnTo: auth0Config.redirect_uri
+            }
+        });
     }
 
-    // --- Paper Logic ---
-    function initPaperLogic() {
+    function loadPaperData() {
         const papers = [
             {
                 label: "Paper 1",
