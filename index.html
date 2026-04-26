@@ -1,85 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D9DGJTDV9B"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-D9DGJTDV9B');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maintenance - Academic Resources</title>
+    <title>Rintaro ONTACHI | Academic Profile</title>
+
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            /* 白と単色（グレー/ネイビー系）のグラデーション */
-            background: linear-gradient(135deg, #ffffff 0%, #2c3e50 100%);
-            background-attachment: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #1a202c;
+        body {
+            margin: 0; padding: 0; color: #24292e; font-size: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #0b0e14;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(255,255,255,0.9) 0%, transparent 70%),
+                linear-gradient(125deg, #ffffff 0%, #ffffff 30%, #d1d5da 35%, #444d56 50%, #1b1f23 70%, #0b0e14 100%);
+            background-attachment: fixed; min-height: 100vh;
         }
 
-        .maintenance-card {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 4rem 3rem;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 85%;
-            text-align: center;
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+
+        /* グラスモーフィズム共通 */
+        header, .glass-section, footer {
+            background-color: rgba(255, 255, 255, 0.82); 
+            padding: 30px 40px;
+            border-radius: 16px; margin-bottom: 25px; 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
-        .title {
-            font-size: 4.5rem;
-            font-weight: 800;
-            margin: 0;
-            letter-spacing: -0.04em;
-            color: #1a365d; /* 濃い紺色 */
-            line-height: 1;
+        /* 論文切り替えメインカード */
+        .research-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 16px; margin-bottom: 25px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
-        .subtitle {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-top: 0.75rem;
-            margin-bottom: 2.5rem;
-            color: #4a5568;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
+        h1 { border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; margin-top: 0; font-size: 2em; }
+        h2 { margin-top: 0; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; color: #002f5d; font-size: 1.4em; }
+
+        /* セレクターボタン */
+        .paper-selector { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .paper-btn {
+            padding: 10px 20px; border: 1px solid #d1d5da; background: #fff;
+            border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: 0.2s; font-weight: bold;
+        }
+        .paper-btn.active { background: #002f5d; color: #fff; border-color: #002f5d; }
+        
+        .link-list { list-style: none; padding: 0; }
+        .link-list li { margin-bottom: 12px; }
+        .link-list a { color: #0366d6; text-decoration: none; font-weight: 500; }
+
+        /* プレビューエリア */
+        .pdf-container {
+            margin: 20px 0 30px 0; border: 1px solid #d1d5da; border-radius: 8px;
+            overflow: hidden; background: #fff;
+        }
+        iframe { width: 100%; height: 600px; border: none; }
+
+        /* Abstract装飾 */
+        .abstract-container { border-top: 1px solid #eee; padding-top: 25px; }
+        .abstract-label {
+            font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.2em;
+            color: #666; margin-bottom: 15px; font-weight: bold; display: block;
+        }
+        .abstract-content {
+            font-family: 'EB Garamond', serif; font-size: 0.95em;
+            line-height: 1.7; color: #1a1a1a; text-align: justify;
         }
 
-        .message {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: #2d3748;
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
-            padding-top: 2.5rem;
-        }
-
-        .brand-name {
-            font-size: 0.85rem;
-            margin-top: 3.5rem;
-            color: #718096;
-            font-weight: 500;
-        }
+        footer p { margin: 0; font-size: 0.85em; color: #586069; }
     </style>
 </head>
 <body>
 
-    <div class="maintenance-card">
-        <h1 class="title">Sorry</h1>
-        <div class="subtitle">Maintenance</div>
-        
-        <p class="message">
-            This website is currently down for maintenance.<br>
-            We apologize for the inconvenience and will be back online shortly.
-        </p>
+<div class="container">
+    <header>
+        <h1>Academic Resources</h1>
+        <p style="font-size: 1.05em; color: #444; margin: 10px 0 0 0;"><strong>Rintaro ONTACHI</strong> | Independent Researcher</p>
+    </header>
 
-        <div class="brand-name">© 2026 Rintaro ONTACHI | Built with GitHub Pages</div>
-    </div>
+    <section class="glass-section">
+        <h2>Profiles & Links</h2>
+        <ul class="link-list">
+            <li><a href="https://orcid.org/0009-0008-9733-8193" target="_blank">ORCID Profile</a></li>
+            <li><a href="https://zenodo.org/search?q=metadata.creators.person_or_org.name%3A%22Ontachi%2C%20Rintaro%22" target="_blank">Zenodo Profile</a></li>
+        </ul>
+    </section>
+
+    <section class="research-card">
+        <div class="paper-selector" id="paperSelector"></div>
+
+        <div id="dynamicContent">
+            <h2 id="paperTitle">Loading...</h2>
+            
+            <ul id="downloadLinks" class="link-list" style="margin-bottom: 25px;">
+                </ul>
+
+            <div class="pdf-container">
+                <iframe id="pdfViewer" src="" title="Document Preview"></iframe>
+            </div>
+
+            <div class="abstract-container">
+                <span class="abstract-label">Abstract</span>
+                <div id="abstractText" class="abstract-content">
+                    </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Rintaro ONTACHI | Built with GitHub Pages</p>
+    </footer>
+</div>
+
+<script>
+    // 論文ごとのデータ設定
+    const papers = [
+        {
+            label: "Paper 1",
+            title: "On Admissible Operators over Group Rings",
+            pdf: "001.pdf",
+            tex: "001.tex",
+            abstract: "This paper systematically describes the structure of linear combinations in the group ring <strong>CG</strong> from three perspectives: algebra, analysis, and quantum mechanics. By realizing the group ring as bounded operators on a Hilbert space through the left regular representation, the study elucidates its spectral properties and trace structures. Notably, it demonstrates that the product in a group ring is isomorphic to the composition of quantum transition amplitudes and reveals that the geometric characteristics of the group are reflected in the spectral radius of the operators."
+        }
+    ];
+
+    const selector = document.getElementById('paperSelector');
+    const titleEl = document.getElementById('paperTitle');
+    const viewer = document.getElementById('pdfViewer');
+    const abstractDiv = document.getElementById('abstractText');
+    const downloadDiv = document.getElementById('downloadLinks');
+
+    function updatePaper(index) {
+        const p = papers[index];
+        
+        titleEl.innerText = p.title;
+        viewer.src = p.pdf;
+        abstractDiv.innerHTML = p.abstract;
+        downloadDiv.innerHTML = `
+            <li><a href="${p.tex}" download>Download Source (${p.tex})</a></li>
+            <li><a href="${p.pdf}" download>Download Full Paper (${p.pdf})</a></li>
+        `;
+
+        document.querySelectorAll('.paper-btn').forEach((btn, i) => {
+            btn.classList.toggle('active', i === index);
+        });
+    }
+
+    papers.forEach((p, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'paper-btn';
+        btn.innerText = p.label;
+        btn.onclick = () => updatePaper(index);
+        selector.appendChild(btn);
+    });
+
+    updatePaper(0);
+</script>
 
 </body>
 </html>
