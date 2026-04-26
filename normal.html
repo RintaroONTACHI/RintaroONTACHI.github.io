@@ -1,85 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D9DGJTDV9B"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-D9DGJTDV9B');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rintaro ONTACHI | Academic Profile</title>
+
     <style>
-        body { margin: 0; background-color: #0b0e14; color: #24292e; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { max-width: 800px; width: 100%; padding: 20px; }
-        #logged-in-view { display: none; background: white; padding: 40px; border-radius: 16px; }
-        #loading-view { color: white; text-align: center; font-size: 1.2em; }
-        .logout-btn { background: #d93025; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; float: right; }
+        body {
+            margin: 0; padding: 0; color: #24292e; font-size: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #0b0e14;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(255,255,255,0.9) 0%, transparent 70%),
+                linear-gradient(125deg, #ffffff 0%, #ffffff 30%, #d1d5da 35%, #444d56 50%, #1b1f23 70%, #0b0e14 100%);
+            background-attachment: fixed; min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; width: 100%; }
+
+        header, .glass-section, footer, .research-card {
+            background-color: rgba(255, 255, 255, 0.82); 
+            padding: 30px 40px; border-radius: 16px; margin-bottom: 25px; 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        #logged-in-view { display: none; }
+        #loading-view { text-align: center; color: white; background: rgba(0,0,0,0.6); padding: 30px; border-radius: 15px; }
+
+        .logout-btn { 
+            background: #d93025; color: white; border: none; padding: 8px 16px; 
+            border-radius: 6px; cursor: pointer; float: right; font-weight: bold;
+        }
+
+        .paper-selector { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .paper-btn { padding: 10px 20px; border: 1px solid #d1d5da; background: #fff; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .paper-btn.active { background: #002f5d; color: #fff; }
+        .pdf-container { margin: 20px 0; border: 1px solid #d1d5da; border-radius: 8px; overflow: hidden; background: white; }
+        iframe { width: 100%; height: 600px; border: none; }
+        .link-list { list-style: none; padding: 0; }
+        .link-list a { color: #0366d6; text-decoration: none; font-weight: 500; }
+        .abstract-content { line-height: 1.7; text-align: justify; color: #1a1a1a; font-family: serif; }
     </style>
 </head>
 <body>
 
-    <div id="loading-view">Authenticating... Please wait.</div>
+<div id="loading-view">
+    <p>Authenticating... Please wait.</p>
+</div>
 
-    <div id="logged-in-view" class="container">
+<div id="logged-in-view" class="container">
+    <header>
         <button class="logout-btn" onclick="logout()">Log Out</button>
         <h1>Academic Resources</h1>
-        <p><strong>Rintaro ONTACHI</strong></p>
-        <hr>
-        <div id="paper-content">
-            <h2 id="paperTitle">Loading Paper...</h2>
-            <div id="abstractText"></div>
+        <p><strong>Rintaro ONTACHI</strong> | Independent Researcher</p>
+    </header>
+
+    <section class="research-card">
+        <div class="paper-selector" id="paperSelector"></div>
+        <div id="dynamicContent">
+            <h2 id="paperTitle">Loading...</h2>
+            <ul id="downloadLinks" class="link-list"></ul>
+            <div class="pdf-container">
+                <iframe id="pdfViewer" src="" title="Document Preview"></iframe>
+            </div>
+            <div class="abstract-container" style="border-top: 1px solid #eee; padding-top: 25px;">
+                <span style="font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.2em; color: #666; font-weight: bold; display: block; margin-bottom: 15px;">Abstract</span>
+                <div id="abstractText" class="abstract-content"></div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+    <footer>
+        <p style="text-align: center; font-size: 0.85em; color: #586069;">&copy; 2026 Rintaro ONTACHI | Built with GitHub Pages</p>
+    </footer>
+</div>
 
-    <script>
-        let auth0Client = null;
+<script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
 
-        // 設定値
-        const config = {
-            domain: "epsilon.jp.auth0.com",
-            clientId: "TQ8auFHVhAe44FtxkoOhUPyWScIOXIMI"
-        };
+<script>
+    // --- Auth0 Logic ---
+    let auth0Client = null;
+    const auth0Config = {
+        domain: "epsilon.jp.auth0.com",
+        clientId: "TQ8auFHVhAe44FtxkoOhUPyWScIOXIMI"
+    };
 
-        window.onload = async () => {
-            try {
-                // 1. Auth0の初期化
-                auth0Client = await createAuth0Client({
-                    domain: config.domain,
-                    clientId: config.clientId,
-                    authorizationParams: {
-                        redirect_uri: window.location.origin + window.location.pathname
-                    }
-                });
-
-                // 2. ログイン後の処理
-                const query = window.location.search;
-                if (query.includes("code=") && query.includes("state=")) {
-                    await auth0Client.handleRedirectCallback();
-                    window.history.replaceState({}, document.title, window.location.pathname);
+    window.onload = async () => {
+        try {
+            auth0Client = await createAuth0Client({
+                domain: auth0Config.domain,
+                clientId: auth0Config.clientId,
+                authorizationParams: {
+                    redirect_uri: window.location.origin + window.location.pathname
                 }
+            });
 
-                // 3. ログインチェック
-                const isAuthenticated = await auth0Client.isAuthenticated();
-
-                if (isAuthenticated) {
-                    document.getElementById("loading-view").style.display = "none";
-                    document.getElementById("logged-in-view").style.display = "block";
-                    showPaper();
-                } else {
-                    await auth0Client.loginWithRedirect();
-                }
-            } catch (err) {
-                console.error(err);
-                document.getElementById("loading-view").innerHTML = "Error: " + err.message + "<br>広告ブロックをオフにしてください。";
+            const query = window.location.search;
+            if (query.includes("code=") && query.includes("state=")) {
+                await auth0Client.handleRedirectCallback();
+                window.history.replaceState({}, document.title, window.location.pathname);
             }
-        };
 
-        function showPaper() {
-            document.getElementById("paperTitle").innerText = "On Admissible Operators over Group Rings";
-            document.getElementById("abstractText").innerText = "This paper systematically describes the structure...";
+            const isAuthenticated = await auth0Client.isAuthenticated();
+
+            if (isAuthenticated) {
+                document.getElementById("loading-view").style.display = "none";
+                document.getElementById("logged-in-view").style.display = "block";
+                initPaperLogic();
+            } else {
+                await auth0Client.loginWithRedirect();
+            }
+        } catch (err) {
+            console.error(err);
+            document.getElementById("loading-view").innerHTML = "Authentication Error. Please ensure AdBlock is disabled.";
+        }
+    };
+
+    function logout() {
+        auth0Client.logout({ logoutParams: { returnTo: window.location.origin + window.location.pathname } });
+    }
+
+    // --- Paper Logic ---
+    function initPaperLogic() {
+        const papers = [
+            {
+                label: "Paper 1",
+                title: "On Admissible Operators over Group Rings",
+                pdf: "001.pdf",
+                tex: "001.tex",
+                abstract: "This paper systematically describes the structure of linear combinations in the group ring <strong>CG</strong> from three perspectives: algebra, analysis, and quantum mechanics. By realizing the group ring as bounded operators on a Hilbert space through the left regular representation, the study elucidates its spectral properties and trace structures. Notably, it demonstrates that the product in a group ring is isomorphic to the composition of quantum transition amplitudes and reveals that the geometric characteristics of the group are reflected in the spectral radius of the operators."
+            }
+        ];
+
+        const selector = document.getElementById('paperSelector');
+        const titleEl = document.getElementById('paperTitle');
+        const viewer = document.getElementById('pdfViewer');
+        const abstractDiv = document.getElementById('abstractText');
+        const downloadDiv = document.getElementById('downloadLinks');
+
+        function updatePaper(index) {
+            const p = papers[index];
+            titleEl.innerText = p.title;
+            viewer.src = p.pdf;
+            abstractDiv.innerHTML = p.abstract;
+            downloadDiv.innerHTML = `
+                <li><a href="${p.tex}" download>Download Source (${p.tex})</a></li>
+                <li><a href="${p.pdf}" download>Download Full Paper (${p.pdf})</a></li>
+            `;
+            document.querySelectorAll('.paper-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
         }
 
-        const logout = () => {
-            auth0Client.logout({ logoutParams: { returnTo: window.location.origin + window.location.pathname } });
-        };
-    </script>
+        papers.forEach((p, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'paper-btn';
+            btn.innerText = p.label;
+            btn.onclick = () => updatePaper(index);
+            selector.appendChild(btn);
+        });
+
+        updatePaper(0);
+    }
+</script>
+
 </body>
 </html>
