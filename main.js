@@ -1,59 +1,69 @@
 let auth0Client = null;
 
-// Auth0の設定
+// Auth0の設定値
 const config = {
-  domain: "epsilon.jp.auth0.com", // Auth0ダッシュボードからコピーしてください
-  clientId: "TQ8auFHVhAe44FtxkoOhUPyWScIOXIMI"   // Auth0ダッシュボードからコピーしてください
+  domain: "YOUR_AUTH0_DOMAIN", // Auth0ダッシュボードからコピー
+  clientId: "YOUR_CLIENT_ID"   // Auth0ダッシュボードからコピー
 };
 
 window.onload = async () => {
+  // 1. Auth0クライアントの初期化
   auth0Client = await createAuth0Client({
     domain: config.domain,
     clientId: config.clientId,
     authorizationParams: {
-      // 画像の設定「許可するCallback URL」に合わせる
-      redirect_uri: "https://rintaroontachi.github.io/ok"
+      // 設定を削ったので、トップページを指定
+      redirect_uri: window.location.origin + window.location.pathname
     }
   });
 
-  // 現在のページが /ok (コールバックURL) の場合、認証処理を実行
-  if (window.location.pathname.endsWith("/ok")) {
+  // 2. ログイン後の処理（Auth0から戻ってきた時）
+  const query = window.location.search;
+  if (query.includes("code=") && query.includes("state=")) {
     try {
       await auth0Client.handleRedirectCallback();
-      // 認証が終わったらトップページへ
-      window.location.replace("https://rintaroontachi.github.io/");
-    } catch (e) {
-      console.error("missing:", e);
+      // URLをきれいにする
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } catch (err) {
+      console.error("error:", err);
     }
   }
 
+  // 3. ログイン状態に応じて画面を更新
   updateUI();
 };
 
 const updateUI = async () => {
   const isAuthenticated = await auth0Client.isAuthenticated();
 
+  const loggedInView = document.getElementById("logged-in-view");
+  const loggedOutView = document.getElementById("logged-out-view");
+  const statusText = document.getElementById("status");
+
   if (isAuthenticated) {
+    // ログイン済み：秘密のページを表示
     const user = await auth0Client.getUser();
-    document.getElementById("status").innerText = `${user.name}`;
-    document.getElementById("btn-login").style.display = "none";
-    document.getElementById("btn-logout").style.display = "block";
+    statusText.innerText = `${user.name} ,Hello!`;
+    loggedInView.style.display = "block";
+    loggedOutView.style.display = "none";
   } else {
-    document.getElementById("status").innerText = "not yet log in";
-    document.getElementById("btn-login").style.display = "block";
-    document.getElementById("btn-logout").style.display = "none";
+    // 未ログイン：ログイン案内を表示
+    statusText.innerText = "it can be accessed everyone.";
+    loggedInView.style.display = "none";
+    loggedOutView.style.display = "block";
   }
 };
 
+// ログイン実行
 const login = async () => {
   await auth0Client.loginWithRedirect();
 };
 
+// ログアウト実行
 const logout = () => {
   auth0Client.logout({
     logoutParams: {
-      // 画像の設定「許可するログアウトURL」に合わせる
-      returnTo: "https://rintaroontachi.github.io"
+      returnTo: window.location.origin + window.location.pathname
     }
   });
 };
