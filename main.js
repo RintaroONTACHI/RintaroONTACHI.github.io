@@ -7,59 +7,53 @@ const config = {
 };
 
 window.onload = async () => {
-  // 1. Auth0クライアントの初期化
+  // 1. Initialize Auth0 Client
   auth0Client = await createAuth0Client({
     domain: config.domain,
     clientId: config.clientId,
     authorizationParams: {
-      // 設定を削ったので、トップページを指定
       redirect_uri: window.location.origin + window.location.pathname
     }
   });
 
-  // 2. ログイン後の処理（Auth0から戻ってきた時）
+  // 2. Handle the redirect from Auth0
   const query = window.location.search;
   if (query.includes("code=") && query.includes("state=")) {
     try {
       await auth0Client.handleRedirectCallback();
-      // URLをきれいにする
       window.history.replaceState({}, document.title, window.location.pathname);
     } catch (err) {
-      console.error("error:", err);
+      console.error("Login error:", err);
     }
   }
 
-  // 3. ログイン状態に応じて画面を更新
-  updateUI();
-};
-
-const updateUI = async () => {
+  // 3. Check authentication status
   const isAuthenticated = await auth0Client.isAuthenticated();
 
-  const loggedInView = document.getElementById("logged-in-view");
-  const loggedOutView = document.getElementById("logged-out-view");
-  const statusText = document.getElementById("status");
-
   if (isAuthenticated) {
-    // ログイン済み：秘密のページを表示
-    const user = await auth0Client.getUser();
-    statusText.innerText = `${user.name} ,Hello!`;
-    loggedInView.style.display = "block";
-    loggedOutView.style.display = "none";
+    // Show members-only content
+    showApp();
   } else {
-    // 未ログイン：ログイン案内を表示
-    statusText.innerText = "it can be accessed everyone.";
-    loggedInView.style.display = "none";
-    loggedOutView.style.display = "block";
+    // If not logged in, redirect to login page immediately
+    login();
   }
 };
 
-// ログイン実行
+const showApp = async () => {
+  const user = await auth0Client.getUser();
+  
+  // Update UI for members
+  document.getElementById("status").innerText = `Welcome, ${user.name}!`;
+  document.getElementById("logged-in-view").style.display = "block";
+  document.getElementById("loading-view").style.display = "none";
+};
+
+// Execute Login
 const login = async () => {
   await auth0Client.loginWithRedirect();
 };
 
-// ログアウト実行
+// Execute Logout
 const logout = () => {
   auth0Client.logout({
     logoutParams: {
