@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D9DGJTDV9B"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-D9DGJTDV9B');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rintaro ONTACHI | Academic Profile</title>
@@ -123,14 +132,7 @@
             pdf: "001.pdf",
             tex: "001.tex",
             abstract: "This paper systematically describes the structure of linear combinations in the group ring <strong>CG</strong> from three perspectives: algebra, analysis, and quantum mechanics. By realizing the group ring as bounded operators on a Hilbert space through the left regular representation, the study elucidates its spectral properties and trace structures. Notably, it demonstrates that the product in a group ring is isomorphic to the composition of quantum transition amplitudes and reveals that the geometric characteristics of the group are reflected in the spectral radius of the operators."
-        },
-        //{
-           // label: "Paper 2",
-            //title: "Sample Research Title 002",
-            //pdf: "002.pdf",
-            //tex: "002.tex",
-            //abstract: "2つ目の論文の要約文をここに入力します。プレビューやダウンロードリンクもこれに合わせて切り替わります。"
-        //}
+        }
     ];
 
     const selector = document.getElementById('paperSelector');
@@ -142,7 +144,6 @@
     function updatePaper(index) {
         const p = papers[index];
         
-        // タイトル、プレビュー、Abstract、リンクを一括更新
         titleEl.innerText = p.title;
         viewer.src = p.pdf;
         abstractDiv.innerHTML = p.abstract;
@@ -151,13 +152,11 @@
             <li><a href="${p.pdf}" download>Download Full Paper (${p.pdf})</a></li>
         `;
 
-        // ボタンの見た目を更新
         document.querySelectorAll('.paper-btn').forEach((btn, i) => {
             btn.classList.toggle('active', i === index);
         });
     }
 
-    // ボタン生成
     papers.forEach((p, index) => {
         const btn = document.createElement('button');
         btn.className = 'paper-btn';
@@ -166,7 +165,6 @@
         selector.appendChild(btn);
     });
 
-    // 初期表示
     updatePaper(0);
 </script>
 
