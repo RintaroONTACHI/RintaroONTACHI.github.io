@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>御舘 凛太朗 | Rintaro Ontachi</title>
+
+  <meta name="description"
+        content="御舘 凛太朗の個人ホームページ。数学、群論、研究活動などについて掲載しています。">
+
+  <style>
+    :root {
+      --text: #111;
+      --sub: #666;
+      --line: #d8d8d8;
+      --bg: #fff;
+      --link: #111;
+      --max-width: 900px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Noto Sans JP",
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+      line-height: 1.8;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    a:hover {
+      opacity: 0.6;
+    }
+
+    .container {
+      width: min(calc(100% - 40px), var(--max-width));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 100px 0 80px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .name-ja {
+      margin: 0;
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+    }
+
+    .name-en {
+      margin: 12px 0 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.15rem;
+      letter-spacing: 0.08em;
+      color: var(--sub);
+    }
+
+    .interest {
+      margin-top: 32px;
+      font-size: 1rem;
+    }
+
+    nav {
+      margin-top: 42px;
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      font-size: 0.9rem;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    main {
+      padding: 70px 0 100px;
+    }
+
+    section {
+      margin-bottom: 80px;
+    }
+
+    h2 {
+      margin: 0 0 30px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+
+    .item {
+      margin-bottom: 26px;
+    }
+
+    .item-title {
+      font-weight: 500;
+    }
+
+    .item-meta {
+      margin-top: 2px;
+      color: var(--sub);
+      font-size: 0.9rem;
+    }
+
+    .activity-list {
+      margin: 0;
+      padding-left: 1.4em;
+    }
+
+    .activity-list li {
+      margin-bottom: 12px;
+      padding-left: 0.3em;
+    }
+
+    .contact {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 8px 20px;
+      max-width: 600px;
+    }
+
+    .contact dt {
+      color: var(--sub);
+    }
+
+    .contact dd {
+      margin: 0;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 30px 0 50px;
+      color: var(--sub);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 65px 0 55px;
+      }
+
+      main {
+        padding: 50px 0 70px;
+      }
+
+      section {
+        margin-bottom: 60px;
+      }
+
+      nav {
+        gap: 18px;
+      }
+
+      .contact {
+        grid-template-columns: 80px 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+
+      <h1 class="name-ja">御舘 凛太朗</h1>
+      <p class="name-en">Rintaro Ontachi</p>
+
+      <p class="interest">
+        関心分野：群論 (Group Theory)
+      </p>
+
+      <nav>
+        <a href="#about">About</a>
+        <a href="#activities">Activities</a>
+        <a href="#research">Research</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <main>
+    <div class="container">
+
+      <!-- About -->
+      <section id="about">
+        <h2>About</h2>
+
+        <p>
+          数学を中心に、研究・競技数学などの活動をしています。
+          特に群論に関心があります。
+        </p>
+
+        <p>
+          現在は金沢大学附属高等学校に在籍しています。
+        </p>
+      </section>
+
+
+      <!-- Activities -->
+      <section id="activities">
+        <h2>Activities</h2>
+
+        <ul class="activity-list">
+          <li>
+            金沢大学附属高等学校 80回生
+          </li>
+
+          <li>
+            学校法人角川ドワンゴ学園
+            N高グループ研究部 数理科学グループ 6期生
+          </li>
+
+          <li>
+            第46回 数理の翼夏季セミナー / 湧源クラブ
+          </li>
+
+          <li>
+            第5回 高校生数学コンテスト in Hamamatsu 決勝
+          </li>
+        </ul>
+      </section>
+
+
+      <!-- Research -->
+      <section id="research">
+        <h2>Research</h2>
+
+        <div class="item">
+          <div class="item-title">群論</div>
+          <div class="item-meta">Group Theory</div>
+        </div>
+
+        <p>
+          研究内容や成果については、今後こちらに掲載する予定です。
+        </p>
+      </section>
+
+
+      <!-- Contact -->
+      <section id="contact">
+        <h2>Contact</h2>
+
+        <dl class="contact">
+          <dt>Mail</dt>
+          <dd>
+            <a href="mailto:ontachi@outlook.jp">
+              ontachi@outlook.jp
+            </a>
+          </dd>
+
+          <dt>X</dt>
+          <dd>
+            <a href="https://x.com/epsilon0924"
+               target="_blank"
+               rel="noopener noreferrer">
+              @epsilon0924
+            </a>
+          </dd>
+        </dl>
+      </section>
+
+    </div>
+  </main>
+
+
+  <footer>
+    <div class="container">
+      © 2026 Rintaro Ontachi
+    </div>
+  </footer>
+
+</body>
+</html>
