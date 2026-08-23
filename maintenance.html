@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Maintenance | Rintaro Ontachi</title>
+
+  <style>
+    :root {
+      --text: #111;
+      --sub: #666;
+      --line: #d8d8d8;
+      --bg: #fff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Noto Sans JP",
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+      line-height: 1.8;
+    }
+
+    .container {
+      width: min(calc(100% - 40px), 900px);
+      margin: 0 auto;
+    }
+
+    main {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .maintenance {
+      width: 100%;
+      padding: 70px 0;
+    }
+
+    .symbol {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 3rem;
+      line-height: 1;
+      margin-bottom: 35px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      line-height: 1.3;
+    }
+
+    .en {
+      margin: 10px 0 0;
+      color: var(--sub);
+      font-family: Georgia, "Times New Roman", serif;
+      letter-spacing: 0.08em;
+    }
+
+    .line {
+      width: 100%;
+      border-top: 1px solid var(--line);
+      margin: 40px 0;
+    }
+
+    .message {
+      max-width: 620px;
+    }
+
+    .message p {
+      margin: 0 0 16px;
+    }
+
+    .status {
+      margin-top: 35px;
+      padding-left: 18px;
+      border-left: 2px solid var(--text);
+      color: var(--sub);
+      font-size: 0.9rem;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 30px;
+      left: 0;
+      width: 100%;
+      color: var(--sub);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      .maintenance {
+        padding: 40px 0;
+      }
+
+      .symbol {
+        font-size: 2.5rem;
+      }
+
+      footer {
+        position: static;
+        margin-top: 40px;
+        padding-bottom: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main>
+    <div class="container">
+      <div class="maintenance">
+
+        <div class="symbol">∎</div>
+
+        <h1>Maintenance</h1>
+        <p class="en">Rintaro Ontachi</p>
+
+        <div class="line"></div>
+
+        <div class="message">
+          <p>
+            現在、ホームページのメンテナンスを行っています。
+          </p>
+
+          <p>
+            ご不便をおかけしますが、しばらくお待ちください。
+          </p>
+
+          <div class="status">
+            The website is currently under maintenance.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Rintaro Ontachi
+    </div>
+  </footer>
+
+</body>
+</html>
