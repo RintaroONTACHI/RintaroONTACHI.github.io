@@ -1,0 +1,80 @@
+name: MathBot Daily
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "実行する処理"
+        required: true
+        default: "morning"
+        type: choice
+        options:
+          - morning
+          - evening
+
+  schedule:
+    # UTC 22:00 = JST 07:00
+    - cron: "0 22 * * *"
+
+    # UTC 13:00 = JST 22:00
+    - cron: "0 13 * * *"
+
+jobs:
+  mathbot:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Playwright browsers
+        run: |
+          python -m playwright install --with-deps chromium
+
+      - name: Run MathBot
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          GEMINI_MODEL: gemini-3.1-flash-lite
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            python src/main.py "${{ inputs.mode }}"
+          else
+            HOUR=$(date -u +%H)
+
+            if [ "$HOUR" = "22" ]; then
+              python src/main.py morning
+            elif [ "$HOUR" = "13" ]; then
+              python src/main.py evening
+            else
+              echo "Unknown scheduled time: $HOUR"
+              exit 1
+            fi
+          fi
+
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/ docs/
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update MathBot"
+            git push
+          fi
