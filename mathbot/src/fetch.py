@@ -35,7 +35,7 @@ def is_valid_problem(
     if mathnet_id in used_ids:
         return False
 
-    # 図付き問題は現在除外
+    # MathNet側で画像付きと判定されている問題を除外
     if row.get("has_images", False):
         return False
 
@@ -47,6 +47,37 @@ def is_valid_problem(
         return False
 
     if not problem.strip():
+        return False
+
+    # Markdown画像を含む問題を除外
+    # 例:
+    # ![](image.png)
+    # ![figure](...)
+    if "![" in problem:
+        return False
+
+    # HTML画像を含む問題も除外
+    # 例:
+    # <img src="...">
+    if "<img" in problem.lower():
+        return False
+
+    # 画像ファイルへの直接参照も除外
+    image_extensions = (
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".gif",
+        ".webp",
+        ".svg",
+    )
+
+    lower_problem = problem.lower()
+
+    if any(
+        ext in lower_problem
+        for ext in image_extensions
+    ):
         return False
 
     return True
@@ -65,8 +96,11 @@ def choose_problem(
     # ストリーミングでは全件をメモリに持たない
     candidates = []
 
-    # 最初の一定数だけ見て候補を作る
+    # 最大1000問まで探索
     max_scan = 1000
+
+    # 候補を20問集めたら終了
+    target_candidates = 20
 
     for i, row in enumerate(dataset):
 
@@ -76,8 +110,7 @@ def choose_problem(
         ):
             candidates.append(row)
 
-            # 十分な候補が集まったら終了
-            if len(candidates) >= 20:
+            if len(candidates) >= target_candidates:
                 break
 
         if i >= max_scan:
