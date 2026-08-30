@@ -4,33 +4,52 @@ from playwright.sync_api import sync_playwright
 
 def render_latex(text: str, output_path: str) -> str:
     output = Path(output_path)
-    output.parent.mkdir(parents=True, exist_ok=True)
+    output.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
 
     html = f"""<!DOCTYPE html>
 <html lang="ja">
+
 <head>
+
 <meta charset="UTF-8">
 
 <style>
+
 body {{
     margin: 0;
     padding: 40px;
+
     background: white;
     color: black;
-    font-family: "Noto Sans CJK JP", "Noto Sans JP", sans-serif;
+
+    font-family:
+        "Noto Sans CJK JP",
+        sans-serif;
+
     font-size: 28px;
+    line-height: 1.8;
 }}
 
 .content {{
     width: 1000px;
 }}
+
 </style>
 
 <script>
 window.MathJax = {{
     tex: {{
-        inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
-        displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']]
+        inlineMath: [
+            ['$', '$'],
+            ['\\\\(', '\\\\)']
+        ],
+        displayMath: [
+            ['$$', '$$'],
+            ['\\\\[', '\\\\]']
+        ]
     }}
 }};
 </script>
@@ -49,10 +68,12 @@ window.MathJax = {{
 </div>
 
 </body>
+
 </html>
 """
 
     with sync_playwright() as p:
+
         browser = p.chromium.launch()
 
         page = browser.new_page(
@@ -63,9 +84,12 @@ window.MathJax = {{
             device_scale_factor=2
         )
 
-        page.set_content(html)
+        page.set_content(
+            html,
+            wait_until="networkidle"
+        )
 
-        # MathJaxが読み込まれるまで待つ
+        # MathJaxの読み込みを待つ
         page.wait_for_function(
             """
             () =>
@@ -78,12 +102,23 @@ window.MathJax = {{
 
         # MathJaxの初期化完了を待つ
         page.evaluate(
-            """() => MathJax.startup.promise"""
+            """
+            () => MathJax.startup.promise
+            """
         )
 
-        # 明示的にtypeset
+        # 数式をレンダリング
         page.evaluate(
-            """() => MathJax.typesetPromise()"""
+            """
+            () => MathJax.typesetPromise()
+            """
+        )
+
+        # 日本語フォントなどのWebフォントが読み込まれるまで待つ
+        page.evaluate(
+            """
+            () => document.fonts.ready
+            """
         )
 
         # 数式が生成されたことを確認
