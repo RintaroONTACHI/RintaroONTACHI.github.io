@@ -1,9 +1,11 @@
+```python
 import html
 from pathlib import Path
 
 
 DOCS = Path("docs")
 PROBLEMS_DIR = DOCS / "problems"
+
 
 MATHJAX = """
 <script>
@@ -22,7 +24,33 @@ window.MathJax = {
 """
 
 
-def page_start(title):
+def format_category(category):
+
+    if isinstance(category, list):
+
+        values = [
+            str(x)
+            for x in category
+            if x
+        ]
+
+        if values:
+            return ", ".join(values)
+
+        return "数学"
+
+    if category:
+        return str(category)
+
+    return "数学"
+
+
+def page_start(
+    title,
+    css_path,
+    home_path
+):
+
     return f"""
 <!DOCTYPE html>
 <html lang="ja">
@@ -36,7 +64,8 @@ def page_start(title):
 
 <title>{html.escape(title)} | MathBot</title>
 
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet"
+      href="{css_path}">
 
 {MATHJAX}
 
@@ -48,7 +77,7 @@ def page_start(title):
 
 <div class="container">
 
-<a href="../index.html">
+<a href="{home_path}">
 
 <div class="site-title">
 MathBot
@@ -71,6 +100,7 @@ MathBot
 
 
 def page_end():
+
     return """
 </div>
 
@@ -105,7 +135,8 @@ def generate_site(problems):
     )
 
     published = [
-        p for p in problems
+        p
+        for p in problems
         if p.get("published_at")
     ]
 
@@ -118,6 +149,10 @@ def generate_site(problems):
 
     for problem in published:
 
+        category = format_category(
+            problem.get("category")
+        )
+
         cards += f"""
 <a class="problem-card"
    href="problems/{problem['id']}.html">
@@ -127,7 +162,7 @@ def generate_site(problems):
     </div>
 
     <div class="problem-meta">
-        {html.escape(problem.get("category", "数学"))}
+        {html.escape(category)}
         ·
         {html.escape(problem["published_at"])}
     </div>
@@ -136,7 +171,11 @@ def generate_site(problems):
 """
 
     index = f"""
-{page_start("過去問")}
+{page_start(
+    "過去問",
+    "../style.css",
+    "../index.html"
+)}
 
 <h1>過去問</h1>
 
@@ -157,6 +196,10 @@ MathBotで出題した数学問題のアーカイブです。
     )
 
     for problem in published:
+
+        category = format_category(
+            problem.get("category")
+        )
 
         solution = ""
 
@@ -179,7 +222,11 @@ MathBotで出題した数学問題のアーカイブです。
 """
 
         page = f"""
-{page_start(problem["title"])}
+{page_start(
+    problem["title"],
+    "../../style.css",
+    "../index.html"
+)}
 
 <a class="back"
    href="../index.html">
@@ -192,7 +239,7 @@ MathBotで出題した数学問題のアーカイブです。
 
 <div class="problem-meta">
 
-{html.escape(problem.get("category", "数学"))}
+{html.escape(category)}
 
 ·
 
@@ -224,3 +271,4 @@ MathBotで出題した数学問題のアーカイブです。
             page,
             encoding="utf-8"
         )
+```
