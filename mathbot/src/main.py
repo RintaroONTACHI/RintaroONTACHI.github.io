@@ -32,7 +32,7 @@ def import_problems(
 ):
 
     fetched = fetch_problems(
-	probrems
+	problems
 )
 
     for raw in fetched:
