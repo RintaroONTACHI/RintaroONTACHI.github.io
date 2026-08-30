@@ -1,5 +1,5 @@
 name: MathBot Daily
-
+working-directory: mathbot
 on:
   workflow_dispatch:
     inputs:
