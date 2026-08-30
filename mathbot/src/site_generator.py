@@ -1,4 +1,3 @@
-```python
 import html
 from pathlib import Path
 
@@ -271,4 +270,3 @@ MathBotで出題した数学問題のアーカイブです。
             page,
             encoding="utf-8"
         )
-```
