@@ -1,9 +1,14 @@
 import html
+import shutil
 from pathlib import Path
 
 
 DOCS = Path("docs")
 PROBLEMS_DIR = DOCS / "problems"
+
+# MathBot専用CSS
+SOURCE_CSS = Path("style.css")
+SITE_CSS = DOCS / "style.css"
 
 
 MATHJAX = """
@@ -133,6 +138,20 @@ def generate_site(problems):
         exist_ok=True
     )
 
+    # MathBot専用CSSをdocsへコピー
+    if SOURCE_CSS.exists():
+
+        shutil.copyfile(
+            SOURCE_CSS,
+            SITE_CSS
+        )
+
+    else:
+
+        raise FileNotFoundError(
+            f"MathBot CSSが見つかりません: {SOURCE_CSS}"
+        )
+
     published = [
         p
         for p in problems
@@ -154,7 +173,7 @@ def generate_site(problems):
 
         cards += f"""
 <a class="problem-card"
-   href="problems/{problem['id']}.html">
+   href="problems/{html.escape(problem['id'])}.html">
 
     <div class="problem-title">
         {html.escape(problem["title"])}
@@ -172,7 +191,7 @@ def generate_site(problems):
     index = f"""
 {page_start(
     "過去問",
-    "../style.css",
+    "style.css",
     "../index.html"
 )}
 
@@ -223,7 +242,7 @@ MathBotで出題した数学問題のアーカイブです。
         page = f"""
 {page_start(
     problem["title"],
-    "../../style.css",
+    "../style.css",
     "../index.html"
 )}
 
